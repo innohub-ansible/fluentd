@@ -1,0 +1,5 @@
+---
+# defaults file for fluentd
+fluentd_plugins: []
+fluentd_sources: []
+fluentd_matches: []

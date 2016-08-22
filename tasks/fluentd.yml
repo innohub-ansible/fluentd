@@ -1,0 +1,28 @@
+---
+- name: Download Fluentd
+  sudo: true
+  get_url: url=https://toolbelt.treasuredata.com/sh/install-ubuntu-trusty-td-agent2.sh dest=/tmp/install-ubuntu-trusty-td-agent2.sh
+
+- name: Install Fluentd
+  sudo: true
+  command: sh /tmp/install-ubuntu-trusty-td-agent2.sh
+
+- name: Install Fluentd Plugins
+  sudo: true
+  command: /opt/td-agent/embedded/bin/fluent-gem install {{ item }}
+  with_items: fluentd_plugins
+
+- name: Configure Fluentd
+  sudo: true
+  template:
+    src: ../templates/td-agent.yml
+    dest: /etc/td-agent/td-agent.conf
+
+- name: Stop Fluentd
+  sudo: true
+  command: service td-agent stop
+  ignore_errors: yes
+
+- name: Start Fluentd
+  sudo: true
+  command: service td-agent start

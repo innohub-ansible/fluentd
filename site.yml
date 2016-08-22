@@ -1,0 +1,3 @@
+---
+- include: log_host_servers.yml
+- include: log_client_servers.yml

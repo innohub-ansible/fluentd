@@ -1,0 +1,64 @@
+---
+- hosts: log_host_servers
+  vars:
+    fluentd_plugins:
+      - fluent-plugin-record-reformer
+      - fluent-plugin-record-modifier
+    fluentd_sources:
+      - params:
+          type: "forward"
+      - params:
+          type: "syslog"
+          port: "5140"
+          bind: "0.0.0.0"
+          tag: "syslog.log"
+    fluentd_matches:
+      - match: "syslog.log"
+        params:
+          type: "file"
+          path: "/var/log/td-agent/syslog"
+          time_slice_format: '%Y%m%d'
+          time_slice_wait: '10m'
+          time_format: '%Y%m%dT%H%M%S%x'
+          compress: 'gzip'
+          append: 'true'
+          delimiter: 'SPACE'
+          include_tag_key: "true"
+      - match: "**"
+        params:
+          type: "file"
+          path: "/var/log/td-agent/fluentd.default"
+          time_slice_format: '%Y%m%d'
+          time_slice_wait: '10m'
+          time_format: '%Y%m%dT%H%M%S%x'
+          compress: 'gzip'
+          append: 'true'
+          include_tag_key: "true"
+  tasks:
+    - include: ../tasks/prerequisites.yml
+    - include: ../tasks/fluentd.yml
+  handlers:
+    - include: ../handlers/main.yml
+
+- hosts: log_client_servers
+  vars:
+    fluentd_plugins:
+      - fluent-plugin-record-modifier
+    fluentd_sources:
+      - params:
+          type: "syslog"
+          port: "5140"
+          bind: "0.0.0.0"
+          tag: "syslog.log"
+    fluentd_matches:
+      - match: "**"
+        params:
+          type: "forward"
+          flush_interval: "60s"
+        server_params:
+          host: "{{ hostvars[groups['log_host_servers'][0]]['ansible_eth1']['ipv4']['address']}}"
+
+  tasks:
+    - include: ../tasks/fluentd.yml
+  handlers:
+    - include: ../handlers/main.yml

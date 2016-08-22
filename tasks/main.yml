@@ -1,0 +1,4 @@
+---
+# tasks file for fluentd
+- include: prerequisites.yml
+- include: fluentd.yml

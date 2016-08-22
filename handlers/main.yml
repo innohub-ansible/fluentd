@@ -1,0 +1,7 @@
+---
+# handlers file for fluentd
+- name: start fluentd
+  service: name=td-agent state=started
+
+- name: restart fluentd
+  service: name=td-agent state=restarted

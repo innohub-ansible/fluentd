@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Linus Ramos
+  description: Tasks for Fluentd + Fluentd-UI installation and setup
+  company: InnoHub, Inc.
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - production
+    - monitoring
+    - system
+dependencies: []

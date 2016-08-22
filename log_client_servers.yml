@@ -1,0 +1,7 @@
+---
+# tasks file for elasticsearch-fluentd-kibana
+- hosts: log_client_servers
+  tasks:
+    - include: ./tasks/fluentd.yml
+  handlers:
+    - include: ./handlers/main.yml

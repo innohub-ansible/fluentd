@@ -1,0 +1,26 @@
+{% if fluentd_sources is defined %}
+{% for source in fluentd_sources %}
+<source>
+{% for key, value in source.params.iteritems() %}
+  {{ key }} {{ value }}
+{% endfor %}
+</source>
+{% endfor %}
+{% endif %}
+
+{% if fluentd_matches is defined %}
+{% for match in fluentd_matches %}
+<match {{ match.match }}>
+{% for key, value in match.params.iteritems() %}
+  {{ key }} {{ value }}
+{% endfor %}
+{% if match.server_params is defined %}
+{% for key, value in match.server_params.iteritems() %}
+  <server>
+    {{ key }} {{ value }}
+  </server>
+{% endfor %}
+{% endif %}
+</match>
+{% endfor %}
+{% endif %}

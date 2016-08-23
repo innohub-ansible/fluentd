@@ -1,11 +1,23 @@
 ---
-- name: Download Fluentd
+- name: Debian - Download Fluentd
   sudo: true
   get_url: url=https://toolbelt.treasuredata.com/sh/install-ubuntu-trusty-td-agent2.sh dest=/tmp/install-ubuntu-trusty-td-agent2.sh
+  when: ansible_os_family == "Debian"
 
-- name: Install Fluentd
+- name: RedHat - Download Fluentd
+  sudo: true
+  get_url: url=https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh dest=/tmp/install-redhat-td-agent2.sh
+  when: ansible_os_family == "RedHat"
+
+- name: Debian - Install Fluentd
   sudo: true
   command: sh /tmp/install-ubuntu-trusty-td-agent2.sh
+  when: ansible_os_family == "Debian"
+
+- name: RedHat - Install Fluentd
+  sudo: true
+  command: sh /tmp/install-redhat-td-agent2.sh
+  when: ansible_os_family == "RedHat"
 
 - name: Install Fluentd Plugins
   sudo: true
